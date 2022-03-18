@@ -4,8 +4,11 @@ import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
+import alias from '@rollup/plugin-alias';
+import path from 'path';
 
 const production = !process.env.ROLLUP_WATCH;
+const projectRootDir = path.resolve(__dirname)
 
 function serve() {
 	let server;
@@ -43,6 +46,14 @@ export default {
 				dev: !production
 			}
 		}),
+
+		alias({
+			entries: [{
+				find: '@view',
+				replacement: path.resolve(projectRootDir, 'view')
+			}]
+		}),
+
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
 		css({ output: 'bundle.css' }),
